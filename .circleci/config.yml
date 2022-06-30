@@ -40,3 +40,4 @@ workflows:
   project-udacity-workflow:
     jobs:
       - create_infrastructure
+      - configure_infrastructure
