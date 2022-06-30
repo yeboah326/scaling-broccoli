@@ -1,0 +1,9 @@
+---
+- name: "Exercise 3: Remote Control Using Ansible"
+  hosts: all
+  user: ubuntu
+  become: true
+  become_method: sudo
+  become_user: root
+  roles:
+    - setup
