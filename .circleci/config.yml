@@ -30,25 +30,43 @@ jobs:
   #           command: |
   #             cat inventory
 
-  configure_infrastructure: 
+  # configure_infrastructure: 
+  #     docker:
+  #       - image: python:3.8-alpine3.16
+  #     steps:
+  #       - checkout
+  #       - add_ssh_keys:
+  #               fingerprints: ["be:bf:a7:17:04:5b:82:e4:68:cc:6b:73:16:64:32:22"] 
+  #       - run: 
+  #           name: Install dependencies
+  #           command: |
+  #             apk add --update openssh-server
+  #       - run:
+  #           name: Install Ansible
+  #           command: |
+  #             apk add --update ansible
+  #       - run:
+  #           name: Run Playbook and Configure server
+  #           command: |
+  #             ansible-playbook main.yml -i inventory
+  
+  smoke_test:
       docker:
-        - image: python:3.8-alpine3.16
+      - image: alpine:latest
       steps:
-        - checkout
-        - add_ssh_keys:
-                fingerprints: ["be:bf:a7:17:04:5b:82:e4:68:cc:6b:73:16:64:32:22"] 
-        - run: 
-            name: Install dependencies
-            command: |
-              apk add --update openssh-server
         - run:
-            name: Install Ansible
+            name: Install curl
             command: |
-              apk add --update ansible
+              apk add --update curl
         - run:
-            name: Run Playbook and Configure server
+            name: Perform smoke tests
             command: |
-              ansible-playbook main.yml -i inventory 
+              if curl -s --head "https://blog.udacity.com/%22"
+              then
+                return 0
+              else
+                return 1
+              fi
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -56,6 +74,7 @@ workflows:
   project-udacity-workflow:
     jobs:
       # - create_infrastructure
-      - configure_infrastructure
+      # - configure_infrastructure
           # requires:
           #   - create_infrastructure
+      - smoke_test
