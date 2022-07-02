@@ -61,21 +61,12 @@ jobs:
   
   smoke_test:
       docker:
-        - image: alpine:latest
+        - image: amazon/aws-cli
       steps:
         - run:
-            name: Install curl
+            name: Perform failed tests
             command: |
-              apk add --update curl
-        - run:
-            name: Perform failed smoke tests
-            command: |
-              if curl -s --head "https://blog.udacity.com/%22"
-              then
                 return 1
-              else
-                return 0
-              fi
         - destroy_environment
 
 # Invoke jobs via workflows
