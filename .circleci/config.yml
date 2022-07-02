@@ -32,11 +32,15 @@ jobs:
 
   configure_infrastructure: 
       docker:
-        - image: python:3.7-alpine3.11
+        - image: python:3.8-alpine3.16
       steps:
         - checkout
         - add_ssh_keys:
                 fingerprints: ["be:bf:a7:17:04:5b:82:e4:68:cc:6b:73:16:64:32:22"] 
+        - run: 
+            name: Install dependencies
+            command: |
+              apk add --update openssh-server
         - run:
             name: Install Ansible
             command: |
